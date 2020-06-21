@@ -23,7 +23,7 @@ public class GameInstaller : MonoInstaller
 		};
 
 		Container.Bind<Commander>().AsSingle();
-		Container.BindInstance(levelData);
+		Container.BindInstance(levelData).IfNotBound();
 	}
 }
 
