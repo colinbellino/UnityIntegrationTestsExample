@@ -1,30 +1,26 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
 	private Keyboard _keyboard;
 
-	private Commander _commander = new Commander();
-	private Vector2Int _levelPlayerPosition = new Vector2Int(0, 0);
-	private int[,] _levelBoard = new int[,] {
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 },
-		{ 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-		{ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-		{ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-		{ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1 },
-		{ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-		{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	};
+	private Commander _commander;
+	private LevelData _levelData;
+
+	[Inject]
+	public void Construct(Commander commander, LevelData levelData)
+	{
+		_commander = commander;
+		_levelData = levelData;
+	}
 
 	private void Start()
 	{
 		_keyboard = Keyboard.current;
 
-		var loadLevelCommand = new LoadLevel(_levelBoard, _levelPlayerPosition);
+		var loadLevelCommand = new LoadLevel(_levelData.Board, _levelData.PlayerPosition);
 		_commander.Execute(loadLevelCommand);
 	}
 
